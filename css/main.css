@@ -70,8 +70,13 @@ img {
     display:none;
 }
 
-#totalBet {
+#doubleDown {
     background-color:rgba(0, 0, 0, 0);
     outline:0;
     border:0;
+}
+
+img.bet{
+    width: 22vmin!important;
+    height: 22vmin!important;
 }

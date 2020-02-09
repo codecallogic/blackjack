@@ -36,13 +36,15 @@ const TABLE = {
 }
 
 /* ----- APP STATES VARIABLES ----*/
-let bet;
-let totalGamble;
+let tableBet = 0;
+let tableMoneyDown = 0;
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
 let budget = document.querySelector("#budget");
 let beforeWager = document.querySelector("#beforeWager");
 let total = document.querySelector("#total");
+let totalBet = document.querySelector("#totalBet");
+let doubleDown = document.querySelector("#doubleDown");
 let instructions = document.querySelector('#instructions');
 let imageEl = "<img src='' alt=''>";
 let chips = TABLE.chips;
@@ -54,7 +56,7 @@ let readyBet = document.querySelector('.sub-table');
 
 /* ----- EVENT LISTENERS ----*/
 beforeWager.addEventListener('click', buyChips);
-readyBet.addEventListener('click', deal);
+readyBet.addEventListener('click', setBet);
 
 /* ----- FUNCTIONS ----*/
 
@@ -81,8 +83,24 @@ function render(){
 }
 
 function deal(e){
-    let bet = e.target.value;
-    if(e.targeet.tagName !== 'BUTTON') return;
+    // On click of event deal amount placed from betting stage
+    // Arrange table for dealer with random selected cards
+    // Arrange table for player with random selected cards
+}
+
+function setBet(e){
+    let bet = parseInt(e.target.id);
+    if(e.target.tagName !== 'IMG' || tableMoneyDown === 0) return;
+    totalBet.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
+    tableBet += tableMoneyDown - bet <= 0 ? (tableMoneyDown - bet) + bet: bet;
+    tableMoneyDown -= bet;
+    tableMoneyDown <= 0 ? tableMoneyDown = 0: tableMoneyDown;
+    total.innerHTML = tableMoneyDown;
+    totalBet.innerHTML = tableBet;
+    let parentChild = e.target.parentNode;
+    let src = parentChild.firstElementChild.src;
+    doubleDown.firstElementChild.src = src;
+    $(doubleDown.firstElementChild).slideDown(1500);
 }
 
 function placeBet(){
@@ -108,7 +126,8 @@ function buyChips(e){
     let moneyDown = PLAYERS.playerHands.moneyDown = budget.value;
     budget.style.cssText = "display:none";
     beforeWager.style.cssText = "display:none";
-    total.innerHTML = Math.ceil((Math.round(moneyDown/10))*10);
+    tableMoneyDown = Math.ceil((Math.round(moneyDown/10))*10);
+    total.innerHTML = tableMoneyDown;
     total.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
     $(instructions).fadeOut(500);
     placeBet();
