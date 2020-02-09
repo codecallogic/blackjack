@@ -3,9 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.typekit.net/rvo5uyr.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
 <body>
-    
+    <div class="container-fluid">
+        
+        <div id="table">
+            <div class="row">
+                <div class="col-2 mt-3">
+                    <div class="sub-table">
+                        <button id="bet500"><img src="" alt="" srcset=""></button>
+                        <button id="bet100"><img src="" alt="" srcset=""></button>
+                        <button id="bet10"><img src="" alt="" srcset=""></button>
+                        <button id="bet1"><img src="" alt="" srcset=""></button>
+                        <div id="total"></div>
+                    </div>
+                </div>
+                <div class="d-flex col-1 align-items-end">
+                    <button id="totalBet"><img src="" alt="" srcset=""><img src="" alt="" srcset=""></button>
+                </div>
+                <div class="col-6">
+                    <div id="instructions"></div>
+                    <div class="md-form form-sm">
+                        <div class="d-flex justify-content-center" style="margin-top:25vmin;"><input maxlength="5" type="text" id="budget">
+                        <button id="beforeWager">Place</button></div>
+                    </div>
+                    <div id="playerCard"></div>
+                </div>
+            </div>
+            
+            
+            
+            <div id="dealerCard"></div>
+            <button id="deal">Deal</button>
+            <button id="hit"></button>
+            <button id="stand"></button>
+            <button id="insure"></button>
+        </div>
+        
+    </div>
+    <script src="js/main.js"></script>
 </body>
 </html>

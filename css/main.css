@@ -1,0 +1,77 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    font-family: monarcha, serif;
+    font-style: normal;
+    font-weight: 800;
+  }
+
+:root {
+    --dark-cyan: #153928;
+}
+
+body {
+    margin: 0;
+    padding: 0vmin 10vmin;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: monarcha;
+    background-color: rgba(0, 43, 54, 0.774);
+    background-image: url(https://images.pexels.com/photos/1040499/pexels-photo-1040499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+}
+
+#instructions { 
+    color: white;
+    font: 7vmin bold monarcha;
+    font-family: monarcha;
+    text-align: center;
+    padding: 3vmin;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    display:none;
+}
+
+#budget{
+    width:20%;
+    margin: 0 1vmin!important;
+    background-color: rgba(67, 107, 46, 0);
+    color:white;
+    padding:15px;
+    outline:0!important;
+    border:0px;
+    border-bottom:2px solid white;
+    font:5vmin bold monarcha;
+    
+}
+
+#gamble{
+    border-radius:2vmin!important;
+    background-color: rgba(67, 107, 46, 0);
+    color:white;
+    width:15%;
+    outline:0;
+    border:1px solid white;
+    font:4vmin bold monarcha;
+}
+
+.sub-table > button{
+    background-color:rgba(0, 0, 0, 0);
+    outline:0;
+    border:0;
+}
+
+img {
+    height: 17vmin!important;
+    width: 17vmin!important;
+    display:none;
+}
+
+#total {
+    display:none;
+}
+
+#totalBet {
+    background-color:rgba(0, 0, 0, 0);
+    outline:0;
+    border:0;
+}
