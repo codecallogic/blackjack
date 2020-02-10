@@ -141,7 +141,7 @@ function deal(e){
     }, 200);
 
     setValues();
-
+    console.log(count);
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
     dealerCountTotal.innerHTML = dealerHandsValue;
@@ -149,6 +149,8 @@ function deal(e){
     $(playerCountTotal).fadeIn(2000);
     $(dealerCountTotal).fadeIn(2000);
     cardsGenerated = [];
+    count = [];
+    console.log(count);
 }
 
 function generateCard(a, b){
