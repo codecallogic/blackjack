@@ -100,6 +100,8 @@ function deal(e){
         $(TABLE.bets[images].firstElementChild).click(false);
     }
 
+    // Create array and file name for each randomly generated cards for dealer 
+
     for(let i = 0; i < 4; i++){
         let cardType = Math.ceil(Math.random()*13);
         count.push(cardType);
