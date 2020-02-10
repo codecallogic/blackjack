@@ -60,6 +60,27 @@ body {
     border:0;
 }
 
+#beforeWager{
+    border-radius: 2vmin!important;
+    background-color: rgba(233, 233, 233, 0);
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    color:white;
+}
+
+.moves button{
+    margin: 15vmin 0vmin;
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    padding:3vmin 0vmin;
+    border-radius: 50%;
+    background-color: #454358;
+    color:white;
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
 img {
     height: 17vmin!important;
     width: 17vmin!important;
@@ -70,13 +91,38 @@ img {
     display:none;
 }
 
-#doubleDown {
+#doubleDown{
     background-color:rgba(0, 0, 0, 0);
     outline:0;
     border:0;
 }
 
-img.bet{
-    width: 22vmin!important;
-    height: 22vmin!important;
+#deal { 
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    padding:3vmin 0vmin;
+    border-radius: 50%;
+    background-color: #454358;
+    color:white;
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
+#dealerCards img{
+    width:22%!important;
+    height:22%!important;
+    float:left;
+}
+
+#one {
+    -ms-transform: rotate(-15deg); /* IE 9 */
+  transform: rotate(-15deg);
+}
+
+#two {
+    -ms-transform: rotate(15deg); /* IE 9 */
+  transform: rotate(15deg);
+}
+.clearFix {
+    clear:both;
 }

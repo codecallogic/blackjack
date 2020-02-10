@@ -9,8 +9,6 @@ const PLAYERS = {
         hands: 0,
         hit: 0,
         stand: 0,
-        moneyDown: 0,
-        bet: 0,
     }
 }
 
@@ -32,12 +30,15 @@ const TABLE = {
         bet100: document.querySelector('#bet100'),
         bet10: document.querySelector('#bet10'),
         bet1: document.querySelector('#bet1')
-    }
+    },
+    suits: ['C','S','D','H'],
 }
 
 /* ----- APP STATES VARIABLES ----*/
 let tableBet = 0;
 let tableMoneyDown = 0;
+let cardsGenerated = [];
+let dealerHiddenCard;
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
 let budget = document.querySelector("#budget");
@@ -53,17 +54,18 @@ let bet100 = TABLE.bets.bet100.firstElementChild;
 let bet10 = TABLE.bets.bet10.firstElementChild;
 let bet1 = TABLE.bets.bet1.firstElementChild;
 let readyBet = document.querySelector('.sub-table');
+let dealerCards = document.querySelectorAll('#dealerCards > img');
 
 /* ----- EVENT LISTENERS ----*/
 beforeWager.addEventListener('click', buyChips);
 readyBet.addEventListener('click', setBet);
+TABLE.moves.deal.addEventListener('click', deal);
 
 /* ----- FUNCTIONS ----*/
 
 init();
 
 function init(){
-
     render();    
 }
 
@@ -73,19 +75,53 @@ function render(){
     instructions.innerHTML = "Set your bankroll...";
     $(instructions).slideDown(600);
     for(let moves in TABLE.moves){
-        TABLE.moves[moves].style.cssText = "display: none";
+        TABLE.moves[moves].style.cssText = "display:none;";
+    }
+    for(let i = 0; i < 4; i++){
+        let cardType = Math.ceil(Math.random()*13);
+        let suit = Math.floor(Math.random()*TABLE.suits.length);
+        let newCard = generateCard(cardType, suit);
+        cardsGenerated.push(newCard);
+    }
+    console.log(cardsGenerated);
+    
+    for(let i = 0; i < 2; i++){
+        dealerCards[0].id = 'one';
+        dealerCards[1].id = 'two';
+        dealerHiddenCard = `images/${cardsGenerated[0]}.png`
+        dealerCards[0].src = `images/seekers.png`;
+        dealerCards[1].src = `images/${cardsGenerated[1]}.png`;
     }
 
+    $(dealerCards).fadeIn(1500);
+
+    console.log(dealerCards);
     // for(let images in TABLE.bets){
     //     readyBet = TABLE.bets[images];
     // }
-    
 }
 
 function deal(e){
     // On click of event deal amount placed from betting stage
+    for(let moves in TABLE.moves){
+        $(TABLE.moves[moves]).fadeIn(1500);
+        $(instructions).fadeOut(300);
+    }
+    $(TABLE.moves.deal).fadeOut(300);
+    
     // Arrange table for dealer with random selected cards
     // Arrange table for player with random selected cards
+}
+
+function generateCard(a, b){
+    let suit = TABLE.suits[b];
+    let cardType = a; 
+    if(a === 1){cardType = 'A'};
+    if(a === 11){cardType = 'J'};
+    if(a === 12){cardType = 'Q'};
+    if(a === 13){cardType = 'k'};
+    let cardSelected = `${cardType}${suit}`;
+    return cardSelected;
 }
 
 function setBet(e){
@@ -100,7 +136,9 @@ function setBet(e){
     let parentChild = e.target.parentNode;
     let src = parentChild.firstElementChild.src;
     doubleDown.firstElementChild.src = src;
-    $(doubleDown.firstElementChild).slideDown(1500);
+    $(doubleDown.firstElementChild).fadeIn(1500);
+    $(TABLE.moves.deal).fadeIn(1000);
+
 }
 
 function placeBet(){
