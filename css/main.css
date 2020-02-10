@@ -108,21 +108,49 @@ img {
     box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
 }
 
+/* #dearerCards{
+    margin-right: 5vmin!important;
+} */
+
 #dealerCards img{
-    width:22%!important;
-    height:22%!important;
+    width:50%!important;
+    height:50%!important;
     float:left;
+    animation: example1 .5s linear;
 }
 
-#one {
+#playerCards img{
+    width:50%!important;
+    height:50%!important;
+    float:left;
+    animation: example1 .5s linear;
+}
+
+@keyframes example1 {
+0%   { 
+transform: translateY(-100%); 		
+}
+100% { 
+transform: translateY(0%); 
+}
+}
+
+#one, #three{
     -ms-transform: rotate(-15deg); /* IE 9 */
   transform: rotate(-15deg);
 }
 
-#two {
+#two, #four{
     -ms-transform: rotate(15deg); /* IE 9 */
   transform: rotate(15deg);
 }
+
 .clearFix {
     clear:both;
+}
+
+#dealerCount, #playerCount {
+    font:5vmin bold monarcha;
+    color:white;
+    display:none;
 }

@@ -39,6 +39,7 @@ let tableBet = 0;
 let tableMoneyDown = 0;
 let cardsGenerated = [];
 let dealerHiddenCard;
+let count = [];
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
 let budget = document.querySelector("#budget");
@@ -55,6 +56,9 @@ let bet10 = TABLE.bets.bet10.firstElementChild;
 let bet1 = TABLE.bets.bet1.firstElementChild;
 let readyBet = document.querySelector('.sub-table');
 let dealerCards = document.querySelectorAll('#dealerCards > img');
+let playerCards = document.querySelectorAll('#playerCards > img');
+let dealerCountTotal = document.querySelector('#dealerCount');
+let playerCountTotal = document.querySelector('#playerCount');
 
 /* ----- EVENT LISTENERS ----*/
 beforeWager.addEventListener('click', buyChips);
@@ -77,25 +81,7 @@ function render(){
     for(let moves in TABLE.moves){
         TABLE.moves[moves].style.cssText = "display:none;";
     }
-    for(let i = 0; i < 4; i++){
-        let cardType = Math.ceil(Math.random()*13);
-        let suit = Math.floor(Math.random()*TABLE.suits.length);
-        let newCard = generateCard(cardType, suit);
-        cardsGenerated.push(newCard);
-    }
-    console.log(cardsGenerated);
-    
-    for(let i = 0; i < 2; i++){
-        dealerCards[0].id = 'one';
-        dealerCards[1].id = 'two';
-        dealerHiddenCard = `images/${cardsGenerated[0]}.png`
-        dealerCards[0].src = `images/seekers.png`;
-        dealerCards[1].src = `images/${cardsGenerated[1]}.png`;
-    }
 
-    $(dealerCards).fadeIn(1500);
-
-    console.log(dealerCards);
     // for(let images in TABLE.bets){
     //     readyBet = TABLE.bets[images];
     // }
@@ -108,9 +94,60 @@ function deal(e){
         $(instructions).fadeOut(300);
     }
     $(TABLE.moves.deal).fadeOut(300);
+
+    for(let i = 0; i < 4; i++){
+        let cardType = Math.ceil(Math.random()*13);
+        count.push(cardType);
+        let suit = Math.floor(Math.random()*TABLE.suits.length);
+        let newCard = generateCard(cardType, suit);
+        cardsGenerated.push(newCard);
+    }
     
     // Arrange table for dealer with random selected cards
+    setTimeout(function(){
+        for(let i = 0; i < 2; i++){
+            dealerCards[0].id = 'one';
+            dealerCards[1].id = 'two';
+            dealerHiddenCard = `images/${cardsGenerated[0]}.png`
+            dealerCards[0].src = `images/seekers.png`;
+            dealerCards[1].src = `images/${cardsGenerated[1]}.png`;
+        }
+        $(dealerCards).fadeIn(1500);
+    }, 200);
+
+    
     // Arrange table for player with random selected cards
+    setTimeout(function(){
+        for(let i = 0; i < 2; i++){
+            playerCards[0].id = 'three';
+            playerCards[1].id = 'four';
+            playerCards[0].src = `images/${cardsGenerated[2]}.png`;
+            playerCards[1].src = `images/${cardsGenerated[3]}.png`;
+        }
+        $(playerCards).fadeIn(1500);
+    }, 200);
+
+    // Setting value of cards based on cards selected
+
+    count[0] === 11 || count[0] === 12 || count[0] === 13 ? count[0] = 10 : count[0];
+    count[1] === 11 || count[1] === 12 || count[1] === 13 ? count[1] = 10 : count[1];
+    if(count[0] === 1){count[0] + count[1] > 21 ? count[0] = 1: count[0] = 11;}
+    if(count[1] === 1){count[0] + count[1] > 21 ? count[1] = 1: count[1] = 11;}
+
+    dealerCountTotal.innerHTML = count[1];
+    $(dealerCountTotal).fadeIn(2000);
+
+    count[2] === 11 || count[2] === 12 || count[2] === 13 ? count[2] = 10 : count[2];
+    count[3] === 11 || count[3] === 12 || count[3] === 13 ? count[3] = 10 : count[3];
+    if(count[2] === 1){count[2] + count[3] > 21 ? count[2] = 1: count[2] = 11;}
+    if(count[3] === 1){count[2] + count[3] > 21 ? count[3] = 1: count[3] = 11;}
+
+    playerCountTotal.innerHTML = count[2]+count[3];
+    $(playerCountTotal).fadeIn(2000);
+
+    // Setting up blackjack rules for dealer flip
+
+    
 }
 
 function generateCard(a, b){
@@ -131,6 +168,12 @@ function setBet(e){
     tableBet += tableMoneyDown - bet <= 0 ? (tableMoneyDown - bet) + bet: bet;
     tableMoneyDown -= bet;
     tableMoneyDown <= 0 ? tableMoneyDown = 0: tableMoneyDown;
+    if(tableMoneyDown <= 0){
+        for(let bets in TABLE.bets){ 
+            TABLE.bets[bets].firstElementChild.style.cssText = "display:none;";
+            total.style.cssText = "display:none;";
+        }
+    }
     total.innerHTML = tableMoneyDown;
     totalBet.innerHTML = tableBet;
     let parentChild = e.target.parentNode;
