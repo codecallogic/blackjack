@@ -3,10 +3,11 @@
     font-family: monarcha, serif;
     font-style: normal;
     font-weight: 800;
-  }
+}
 
 :root {
     --dark-cyan: #153928;
+    --yellow-gold: #F8D363;
 }
 
 body {
@@ -20,14 +21,32 @@ body {
     background-image: url(https://images.pexels.com/photos/1040499/pexels-photo-1040499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
 }
 
+#machiavelli {
+    display:none;
+}
+
+#range{
+    font:5vmin bold monarcha;
+    margin-top:10vmin;
+    background-color: #565656;
+    color: white;
+    text-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: text;
+        -moz-background-clip: text;
+            background-clip: text;
+    
+}
+
 #instructions { 
     color: white;
     font: 7vmin bold monarcha;
     font-family: monarcha;
     text-align: center;
     padding: 3vmin;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: black;
+    text-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: text;
+        -moz-background-clip: text;
+            background-clip: text;
     display:none;
 }
 
@@ -113,15 +132,15 @@ img {
 } */
 
 #dealerCards img{
-    width:50%!important;
-    height:50%!important;
+    width:40%!important;
+    height:40%!important;
     float:left;
     animation: example1 .5s linear;
 }
 
 #playerCards img{
-    width:50%!important;
-    height:50%!important;
+    width:40%!important;
+    height:40%!important;
     float:left;
     animation: example1 .5s linear;
 }
