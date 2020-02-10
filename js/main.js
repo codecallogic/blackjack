@@ -4,11 +4,13 @@ const PLAYERS = {
         hands: 0,
         hit: 0,
         stand: 0,
+        cardsAtPlay: [],
     },
     playerHands: {
         hands: 0,
         hit: 0,
         stand: 0,
+        cardsAtPlay: [],
     }
 }
 
@@ -43,6 +45,15 @@ let count = [];
 let unavailableCards = [];
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
+let chips = TABLE.chips;
+let bet500 = TABLE.bets.bet500.firstElementChild;
+let bet100 = TABLE.bets.bet100.firstElementChild;
+let bet10 = TABLE.bets.bet10.firstElementChild;
+let bet1 = TABLE.bets.bet1.firstElementChild;
+let dealerHandsCards = PLAYERS.dealer.cardsAtPlay;
+let playerHandsCards = PLAYERS.playerHands.cardsAtPlay;
+let dealerHandsValue = PLAYERS.dealer.hands;
+let playerHandsValue = PLAYERS.playerHands.hands;
 let budget = document.querySelector("#budget");
 let beforeWager = document.querySelector("#beforeWager");
 let range = document.querySelector('#range');
@@ -51,11 +62,6 @@ let totalBet = document.querySelector("#totalBet");
 let doubleDown = document.querySelector("#doubleDown");
 let instructions = document.querySelector('#instructions');
 let imageEl = "<img src='' alt=''>";
-let chips = TABLE.chips;
-let bet500 = TABLE.bets.bet500.firstElementChild;
-let bet100 = TABLE.bets.bet100.firstElementChild;
-let bet10 = TABLE.bets.bet10.firstElementChild;
-let bet1 = TABLE.bets.bet1.firstElementChild;
 let readyBet = document.querySelector('.sub-table');
 let dealerCards = document.querySelectorAll('#dealerCards > img');
 let playerCards = document.querySelectorAll('#playerCards > img');
@@ -85,18 +91,11 @@ function init(){
 }
 
 function render(){
-
     document.querySelector("#table").style.cssText = "background-color:#3A7B28!important; box-shadow: 0 0 200px rgba(0,0,0,0.9) inset; height:85vmin; width:100%; border-radius:10px; margin-top:6vmin;";
     instructions.innerHTML = "Set your bankroll...";
     $(instructions).slideDown(600);
     $(range).slideDown(1500);
-    for(let moves in TABLE.moves){
-        TABLE.moves[moves].style.cssText = "display:none;";
-    }
-    
-    // for(let images in TABLE.bets){
-    //     readyBet = TABLE.bets[images];
-    // }
+    for(let moves in TABLE.moves){TABLE.moves[moves].style.cssText = "display:none;";}
 }
 
 function hit(){
@@ -119,69 +118,37 @@ function hit(){
 
 function deal(e){
     // On click of event fade in play buttons and fade out deal button amount placed from betting stage
-    for(let moves in TABLE.moves){
-        $(TABLE.moves[moves]).fadeIn(1500);
-        $(instructions).fadeOut(300);
-    }
+    for(let moves in TABLE.moves){$(TABLE.moves[moves]).fadeIn(1500); $(instructions).fadeOut(300);}
     $(TABLE.moves.deal).fadeOut(300);
 
     // Disable click for chips after deal is set and game is in motion
-    for(let images in TABLE.bets){
-        $(TABLE.bets[images].firstElementChild).click(false);
-    }
+    for(let images in TABLE.bets){$(TABLE.bets[images].firstElementChild).click(false);}
 
-    // Create array and define file directory for each randomly generated cards for dealer and player
-    for(let i = 0; i < 4; i++){
-        randomCards();
-    }
+    // generate random cards
+    for(let i = 0; i < 4; i++){randomCards();}
 
-    PLAYERS.playerHands.hands += count[2]+count[3];
-    console.log(PLAYERS.playerHands.hands);
-    console.log(count);
+    dealerHandsCards.push(cardsGenerated[0], cardsGenerated[1]);
+    playerHandsCards.push(cardsGenerated[2], cardsGenerated[3]);
     
-    // Arrange table for dealer with random selected cards
+    // Arrange table with random selected cards
     setTimeout(function(){
-        for(let i = 0; i < 2; i++){
-            dealerCards[0].id = 'one';
-            dealerCards[1].id = 'two';
-            dealerHiddenCard = `images/${cardsGenerated[0]}.png`
             dealerCards[0].src = `images/seekers.png`;
-            dealerCards[1].src = `images/${cardsGenerated[1]}.png`;
-        }
-        $(dealerCards).fadeIn(1500);
+            dealerCards[1].src = `images/${dealerHandsCards[1]}.png`;
+            playerCards[0].src = `images/${playerHandsCards[0]}.png`;
+            playerCards[1].src = `images/${playerHandsCards[1]}.png`;
+            $(dealerCards).fadeIn(1500);
+            $(playerCards).fadeIn(1500);
     }, 200);
-
-    count.splice(0,2);
-    console.log(count);
-    
-    // Arrange table for player with random selected cards
-    setTimeout(function(){
-        for(let i = 0; i < 2; i++){
-            playerCards[0].id = 'three';
-            playerCards[1].id = 'four';
-            playerCards[0].src = `images/${cardsGenerated[2]}.png`;
-            playerCards[1].src = `images/${cardsGenerated[3]}.png`;
-        }
-        $(playerCards).fadeIn(1500);
-    }, 200);
-
-    count.splice(0,2);
-
-    // Setting value of cards based on cards selected
 
     setValues();
 
-    PLAYERS.playerHands.hands += count[2]+count[3];
-    PLAYERS.dealer.hands += count[0]+count[1];
-
-    dealerCountTotal.innerHTML = count[1];
-    $(dealerCountTotal).fadeIn(2000);
-
-    playerCountTotal.innerHTML = count[2]+count[3];
+    playerHandsValue += count[2]+count[3];
+    dealerHandsValue += count[1];
+    dealerCountTotal.innerHTML = dealerHandsValue;
+    playerCountTotal.innerHTML = playerHandsValue;
     $(playerCountTotal).fadeIn(2000);
-
-    generateCard = [];
-
+    $(dealerCountTotal).fadeIn(2000);
+    cardsGenerated = [];
 }
 
 function generateCard(a, b){
@@ -205,20 +172,12 @@ function randomCards(){
 }
 
 function setValues(){
-    let faceValues = [11, 12, 13];
-    for(let i = 0; i < faceValues.length; i++){
-        
+    for(let i = 0; i < count.length; i++){count[i] === 11 || count[i] === 12 || count[i] === 13 ? count[i] = 10: false;}
+    for(let i = 0; i < count.length; i++)
+    {
+        count[i] === 1 ? count[i] = 11: false;
+        (count[0] + count[1]) >= 21 || (count[2] + count[3]) >= 21 ? count[i] === 1: false;
     }
-    count[0] === 11 || count[0] === 12 || count[0] === 13 ? count[0] = 10 : count[0];
-    count[1] === 11 || count[1] === 12 || count[1] === 13 ? count[1] = 10 : count[1];
-    if(count[0] === 1){count[0] + count[1] > 21 ? count[0] = 1: count[0] = 11;}
-    if(count[1] === 1){count[0] + count[1] > 21 ? count[1] = 1: count[1] = 11;}
-
-    count[2] === 11 || count[2] === 12 || count[2] === 13 ? count[2] = 10 : count[2];
-    count[3] === 11 || count[3] === 12 || count[3] === 13 ? count[3] = 10 : count[3];
-    if(count[2] === 1){count[2] + count[3] > 21 ? count[2] = 1: count[2] = 11;}
-    if(count[3] === 1){count[2] + count[3] > 21 ? count[3] = 1: count[3] = 11;}
-    
 }
 
 function placeBet(e){
@@ -228,8 +187,10 @@ function placeBet(e){
     tableBet += tableMoneyDown - bet <= 0 ? (tableMoneyDown - bet) + bet: bet;
     tableMoneyDown -= bet;
     tableMoneyDown <= 0 ? tableMoneyDown = 0: tableMoneyDown;
-    if(tableMoneyDown <= 0){
-        for(let bets in TABLE.bets){ 
+    if(tableMoneyDown <= 0)
+    {
+        for(let bets in TABLE.bets)
+        { 
             TABLE.bets[bets].firstElementChild.style.cssText = "display:none;";
             total.style.cssText = "display:none;";
         }
@@ -245,7 +206,8 @@ function placeBet(e){
 }
 
 function setTable(){
-    setTimeout(function(){
+    setTimeout(function()
+    {
         instructions.innerHTML = 'Place your bets...';
         $(instructions).slideDown(600);
     }, 700);
@@ -253,7 +215,8 @@ function setTable(){
     bet100.src = chips.chips100;
     bet10.src = chips.chips10;
     bet1.src = chips.chips1;
-    for(let images in TABLE.bets){
+    for(let images in TABLE.bets)
+    {
         $(TABLE.bets[images].firstElementChild).fadeIn(1500);
         $(total).fadeIn(1500);
         TABLE.bets[images].firstElementChild.className += 'readyBet';
