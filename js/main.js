@@ -62,7 +62,7 @@ let playerCountTotal = document.querySelector('#playerCount');
 
 /* ----- EVENT LISTENERS ----*/
 beforeWager.addEventListener('click', buyChips);
-readyBet.addEventListener('click', setBet);
+readyBet.addEventListener('click', placeBet);
 TABLE.moves.deal.addEventListener('click', deal);
 
 /* ----- FUNCTIONS ----*/
@@ -88,12 +88,17 @@ function render(){
 }
 
 function deal(e){
-    // On click of event deal amount placed from betting stage
+    // On click of event fade in play buttons and fade out deal button amount placed from betting stage
     for(let moves in TABLE.moves){
         $(TABLE.moves[moves]).fadeIn(1500);
         $(instructions).fadeOut(300);
     }
     $(TABLE.moves.deal).fadeOut(300);
+
+    // Disable click for chips after deal is set and game is in motion
+    for(let images in TABLE.bets){
+        $(TABLE.bets[images].firstElementChild).click(false);
+    }
 
     for(let i = 0; i < 4; i++){
         let cardType = Math.ceil(Math.random()*13);
@@ -161,7 +166,7 @@ function generateCard(a, b){
     return cardSelected;
 }
 
-function setBet(e){
+function placeBet(e){
     let bet = parseInt(e.target.id);
     if(e.target.tagName !== 'IMG' || tableMoneyDown === 0) return;
     totalBet.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
@@ -184,7 +189,7 @@ function setBet(e){
 
 }
 
-function placeBet(){
+function setTable(){
     setTimeout(function(){
         instructions.innerHTML = 'Place your bets...';
         $(instructions).slideDown(600);
@@ -211,5 +216,5 @@ function buyChips(e){
     total.innerHTML = tableMoneyDown;
     total.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
     $(instructions).fadeOut(500);
-    placeBet();
+    setTable();
 }
