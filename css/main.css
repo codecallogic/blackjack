@@ -128,8 +128,8 @@ img {
 }
 
 #dealerCards img{
-    width:40%!important;
-    height:40%!important;
+    width:30%!important;
+    height:30%!important;
     float:left;
     animation: example1 .5s linear;
 }
@@ -172,6 +172,7 @@ transform: translateY(0%);
 }
 
 #dealerCount, #playerCount {
+    margin-top:10vmin!important;
     font:5vmin bold monarcha;
     color:white;
     display:none;

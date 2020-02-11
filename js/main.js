@@ -41,7 +41,7 @@ let tableBet = 0;
 let tableMoneyDown = 0;
 let cardsGenerated = [];
 let dealerHiddenCard;
-let count = [1, 7];
+let count = [];
 let unavailableCards = [];
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
@@ -56,6 +56,7 @@ let dealerHandsValue = PLAYERS.dealer.hands;
 let playerHandsValue = PLAYERS.playerHands.hands;
 let budget = document.querySelector("#budget");
 let beforeWager = document.querySelector("#beforeWager");
+let expandTable = document.querySelector('#buyChips');
 let range = document.querySelector('#range');
 let total = document.querySelector("#total");
 let totalBet = document.querySelector("#totalBet");
@@ -87,7 +88,11 @@ init();
 
 function init(){
     budget.focus();
-    render();    
+    render();
+    // deal();
+    // for(let i = 0; i < 2; i++){
+    //     hit();
+    // }
 }
 
 function render(){
@@ -96,33 +101,41 @@ function render(){
     $(instructions).slideDown(600);
     $(range).slideDown(1500);
     for(let moves in TABLE.moves){TABLE.moves[moves].style.cssText = "display:none;";}
-    // console.log(count)
-    // for(let i = 0; i < count.length; i++)
-    // {
-    //     let countGroupOne = count[1] ? count[0] + count[1] : count[0];
-    //     let countGroupTwo = count[1] ? count[0] + count[1] : count[0];
-    //     console.log(countGroupOne);
-    //     let check = count.forEach(function(x){return x === 1});
-    //     console.log(check);
-    //     countGroupOne < 21 || countGroupTwo < 21 ? aces = 11 : false;
-    // }
-    // console.log(count);
 }
 
 function hit(){
     // Add additional card if player presses hit
     randomCards();
-    playerHandsCards.push(cardsGenerated);
+    playerHandsCards = cardsGenerated;
+    // console.log(count);
     setValues();
-    playerHandsValue += count[0];
+    // count[0] = 11;
+    checkScore();
     playerCountTotal.innerHTML = playerHandsValue;
-    document.querySelector('#playerCards').appendChild(newCard);
+    for(let i = 0; i < playerHandsCards.length; i++){
+        document.querySelector('#playerCards').appendChild(newCard.cloneNode());
+    }
     let newPlayerCards = document.querySelectorAll('#playerCards > img');
     newPlayerCards[newPlayerCards.length - 1].src = `images/${playerHandsCards[playerHandsCards.length - 1]}.png`;
     $(newPlayerCards).fadeIn(1500);
+    cardsGenerated = [];
+    count = [];
+    console.log(newPlayerCards);
+    console.log(playerHandsCards);
     console.log(cardsGenerated);
     console.log(count);
     console.log(playerHandsValue);
+}
+
+function checkScore(){
+    if(playerHandsValue === 21){blackjack(); return};
+    if(playerHandsValue += count[0] > 21){if(count[0] === 11){count[0] = 1}};
+    playerHandsValue += count[0];
+    if(playerHandsValue === 21){blackjack(); return};
+}
+
+function blackjack(){
+    console.log('Blackjack');
 }
 
 function deal(e){
@@ -157,6 +170,7 @@ function deal(e){
     playerCountTotal.innerHTML = playerHandsValue;
     $(playerCountTotal).fadeIn(2000);
     $(dealerCountTotal).fadeIn(2000);
+    if(playerHandsValue === 21){blackjack(); return};
     cardsGenerated = [];
     count = [];
 }
@@ -183,34 +197,7 @@ function randomCards(){
 
 function setValues(){
     for(let i = 0; i < count.length; i++){count[i] === 11 || count[i] === 12 || count[i] === 13 ? count[i] = 10: false;}
-    for(let i = 0; i < count.length; i++)
-    {
-        let countGroupOne = count[1] ? count[0] + count[1] : count[0];
-        let countGroupTwo = count[1] ? count[0] + count[1] : count[0];
-        count[i] === 1 ? count[i] = 11: false;
-        countGroupOne >= 21 || countGroupTwo >= 21 ? count[i] === 1 ? count[i] = 1: false : false;
-    }
-    
-
-    // if (playerHand.length === 2) {
-    //     ace = 11
-    // }
-
-    // var currentPlayerHandValue = 15
-    // var playerHand = [10,5, 5]
-    
-
-    // playerHand.forEach(value => currentPlayerHandValue += value)
-
-    // if (ace needs to be 11) {
-    //     aceValue = 11
-    // } else {
-    //     aceValue = 1
-    // }
-
-    // playerHand.push(aceValue)
-
-    // continous
+    for(let i = 0; i < count.length; i++){count[i] === 1 ? count[i] = 11: false;}
 }
 
 function placeBet(e){
@@ -264,6 +251,7 @@ function buyChips(e){
     budget.style.cssText = "display:none";
     beforeWager.style.cssText = "display:none";
     range.style.cssText = "display:none";
+    expandTable.style.cssText = "display:none";
     tableMoneyDown = Math.ceil((Math.round(moneyDown/10))*10);
     total.innerHTML = tableMoneyDown;
     total.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
