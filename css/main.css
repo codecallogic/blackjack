@@ -127,10 +127,6 @@ img {
     box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
 }
 
-/* #dearerCards{
-    margin-right: 5vmin!important;
-} */
-
 #dealerCards img{
     width:40%!important;
     height:40%!important;
@@ -139,8 +135,8 @@ img {
 }
 
 #playerCards img{
-    width:40%!important;
-    height:40%!important;
+    width:30%!important;
+    height:30%!important;
     float:left;
     animation: example1 .5s linear;
 }
@@ -164,6 +160,11 @@ transform: translateY(0%);
 #dealerCards img:nth-of-type(2), #playerCards img:nth-of-type(2){
     -ms-transform: rotate(15deg); /* IE 9 */
   transform: rotate(15deg);
+}
+
+#dealerCards img:nth-of-type(3), #playerCards img:nth-of-type(3){
+    -ms-transform: rotate(-15deg); /* IE 9 */
+  transform: rotate(-15deg);
 }
 
 .clearFix {

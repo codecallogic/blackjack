@@ -41,7 +41,7 @@ let tableBet = 0;
 let tableMoneyDown = 0;
 let cardsGenerated = [];
 let dealerHiddenCard;
-let count = [];
+let count = [1, 7];
 let unavailableCards = [];
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
@@ -96,24 +96,33 @@ function render(){
     $(instructions).slideDown(600);
     $(range).slideDown(1500);
     for(let moves in TABLE.moves){TABLE.moves[moves].style.cssText = "display:none;";}
+    // console.log(count)
+    // for(let i = 0; i < count.length; i++)
+    // {
+    //     let countGroupOne = count[1] ? count[0] + count[1] : count[0];
+    //     let countGroupTwo = count[1] ? count[0] + count[1] : count[0];
+    //     console.log(countGroupOne);
+    //     let check = count.forEach(function(x){return x === 1});
+    //     console.log(check);
+    //     countGroupOne < 21 || countGroupTwo < 21 ? aces = 11 : false;
+    // }
+    // console.log(count);
 }
 
 function hit(){
-    // Check if flip is black jack or hit
-    let cardType = Math.ceil(Math.random()*13);
-    count.push(cardType);
-    let suit = Math.floor(Math.random()*TABLE.suits.length);
-    let newCard = generateCard(cardType, suit);
-    cardsGenerated.push(newCard);
-    unavailableCards.push(newCard);
+    // Add additional card if player presses hit
+    randomCards();
+    playerHandsCards.push(cardsGenerated);
+    setValues();
+    playerHandsValue += count[0];
+    playerCountTotal.innerHTML = playerHandsValue;
     document.querySelector('#playerCards').appendChild(newCard);
     let newPlayerCards = document.querySelectorAll('#playerCards > img');
-    newPlayerCards[2].src = `images/${cardsGenerated[0]}.png`;
+    newPlayerCards[newPlayerCards.length - 1].src = `images/${playerHandsCards[playerHandsCards.length - 1]}.png`;
     $(newPlayerCards).fadeIn(1500);
-
-    // dealerCards[0].src = `images/${cardsGenerated[0]}.png`;
-    // dealerCountTotal.innerHTML = count[0] + count[1];
-    console.log(count[0] + count[1]);
+    console.log(cardsGenerated);
+    console.log(count);
+    console.log(playerHandsValue);
 }
 
 function deal(e){
@@ -141,7 +150,7 @@ function deal(e){
     }, 200);
 
     setValues();
-    console.log(count);
+
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
     dealerCountTotal.innerHTML = dealerHandsValue;
@@ -150,7 +159,6 @@ function deal(e){
     $(dealerCountTotal).fadeIn(2000);
     cardsGenerated = [];
     count = [];
-    console.log(count);
 }
 
 function generateCard(a, b){
@@ -177,9 +185,32 @@ function setValues(){
     for(let i = 0; i < count.length; i++){count[i] === 11 || count[i] === 12 || count[i] === 13 ? count[i] = 10: false;}
     for(let i = 0; i < count.length; i++)
     {
+        let countGroupOne = count[1] ? count[0] + count[1] : count[0];
+        let countGroupTwo = count[1] ? count[0] + count[1] : count[0];
         count[i] === 1 ? count[i] = 11: false;
-        (count[0] + count[1]) >= 21 || (count[2] + count[3]) >= 21 ? count[i] === 1: false;
+        countGroupOne >= 21 || countGroupTwo >= 21 ? count[i] === 1 ? count[i] = 1: false : false;
     }
+    
+
+    // if (playerHand.length === 2) {
+    //     ace = 11
+    // }
+
+    // var currentPlayerHandValue = 15
+    // var playerHand = [10,5, 5]
+    
+
+    // playerHand.forEach(value => currentPlayerHandValue += value)
+
+    // if (ace needs to be 11) {
+    //     aceValue = 11
+    // } else {
+    //     aceValue = 1
+    // }
+
+    // playerHand.push(aceValue)
+
+    // continous
 }
 
 function placeBet(e){
