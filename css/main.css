@@ -116,6 +116,10 @@ img {
     border:0;
 }
 
+#doubleDown img{
+    animation: example1 .5s linear;
+}
+
 #deal { 
     width: 10vmin;
     font:3vmin bold monarcha;
@@ -155,6 +159,7 @@ transform: translateY(0%);
 #dealerCards img:nth-of-type(1), #playerCards img:nth-of-type(1){
     -ms-transform: rotate(-15deg); /* IE 9 */
   transform: rotate(-15deg);
+  animation: example1 .5s linear;
 }
 
 #dealerCards img:nth-of-type(2), #playerCards img:nth-of-type(2){
@@ -177,3 +182,24 @@ transform: translateY(0%);
     color:white;
     display:none;
 }
+
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+    display:none;
+  }
+
+  .endRound {
+      font:8vmin bold monarcha;
+      font-weight:800;
+      text-shadow: 5px 10px 5px black!important; 
+      -webkit-background-clip: text;
+        -moz-background-clip: text;
+          background-clip: text;
+      color: var(--yellow-gold);
+  }
