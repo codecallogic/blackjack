@@ -2,7 +2,7 @@
 const PLAYERS = {
     dealer: {
         hands: 0,
-        cardsAtPlay: [],
+        cardsAtPlay: ['AH','AC'],
     },
     playerHands: {
         hands: 0,
@@ -30,6 +30,7 @@ const TABLE = {
         bet1: document.querySelector('#bet1')
     },
     suits: ['C','S','D','H'],
+    aces: ['AS','AC','AH','AD'],
 }
 
 /* ----- APP STATES VARIABLES ----*/
@@ -86,11 +87,7 @@ function init(){
     budget.select();
     render();
     // deal();
-    // checkScore();
-    // stand();
-    // results();
-    // for(let images in TABLE.bets){$(TABLE.bets[images].firstElementChild)}
-    // console.dir($(TABLE.bets.bet500.firstElementChild).click(false));
+    stand();
 }
 
 function render(){
@@ -117,37 +114,43 @@ function hit(){
 }
 
 function stand(){
+    // Get full dealer hand value
+    if(dealerCards[0].getAttribute('src') === "images/seekers.png"){dealerHandsValue += dealerHiddenCard};
+    // Check if both cards of dealer are aces
+    let allAces = dealerHandsCards.every(r => TABLE.aces.includes(r));
+    if(allAces){for(let i = 0; i < dealerHandsCards.length; i++){dealerHandsValue = 12}};
     console.log(dealerHandsValue);
+    console.log(allAces);
     console.log(dealerHandsCards);
+    dealerFlips();
+    dealerHandsValue > 17 ? results('checkWinner'): false;
 }
 
 function dealerFlips(){
-    $(dealerCards[0]).fadeOut(200);
+    setTimeout(function(){
+    dealerCards[0].style.cssText = "display:none;"
+    }, 1500)
     setTimeout(function(){
         dealerCountTotal.innerHTML = dealerHandsValue;
         dealerCards[0].src = `images/${dealerHandsCards[0]}.png`;
         dealerCards[0].srcset = `images/${dealerHandsCards[0]}.png`;
         $(dealerCards[0]).fadeIn(2000);
-    }, 1000)
+    }, 1800)
 }
 
 function checkScore(){
-    // if(playerHandsValue === 21){results(); return};
     if(playerHandsValue += count[0] > 21){if(count[0] === 11){count[0] = 1}};
     playerHandsValue += count[0];
-    dealerHandsValue += dealerHiddenCard;
-    if(playerHandsValue === 21 && dealerHandsValue < 21){results('blackjack'); return};
     if(playerHandsValue > 21){stand(); return};
 }
 
 function results(player){
     if(player === 'blackjack'){
+        // dealerHandsValue += dealerHiddenCard;
         if(playerHandsValue !== dealerHandsValue){
         setTimeout(function(){
-            dealerHandsValue += count[0];
             dealerFlips();
-        }, 1000)
-        
+        })
         setTimeout(function(){
             saveTableBet = tableBet;
             congrats = tableBet * 1.5
@@ -156,10 +159,13 @@ function results(player){
             endRound.innerHTML = `WINNER $${congrats}`;
             addOverlay();
             newRound();
-        },3000)
-        }else{
-            push(); //Focus here
-        } // Focus here
+        }, 2500)
+        }else if(playerHandsValue === dealerHandsValue){
+            setTimeout(function(){
+                dealerFlips();
+                push();
+            })
+        } 
     }
 }
 
@@ -173,11 +179,15 @@ function newRound(){
 }
 
 function push(){
-
+    setTimeout(function(){
+        endRound.style.cssText = "color:white;";
+        endRound.innerHTML = `PUSH`;
+        addOverlay();
+    },3000)
 }
 
 function addOverlay(){
-    overlay.style.cssText = "display:block;";
+    $(overlay).fadeIn(100);
     $(doubleDown.firstElementChild).fadeOut(1500);
     $(TABLE.moves.deal).fadeOut(1000);
     $(totalBet).fadeOut(1500);
@@ -212,11 +222,11 @@ function deal(e){
             playerCards[1].src = `images/${playerHandsCards[1]}.png`;
             $(dealerCards).fadeIn(1500);
             $(playerCards).fadeIn(1500);
-    }, 200);
+    });
 
     setValues();
     count[2] = 10; count[3] = 11;
-    count[0] = 9; count[1] = 11;
+    count[0] = 11; count[1] = 11;
 
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
@@ -225,7 +235,6 @@ function deal(e){
     playerCountTotal.innerHTML = playerHandsValue;
     $(playerCountTotal).fadeIn(2000);
     $(dealerCountTotal).fadeIn(2000);
-    if(playerHandsValue === 21){results('blackjack'); return};
     cardsGenerated = [];
     count = [];
 }
