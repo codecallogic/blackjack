@@ -2,7 +2,7 @@
 const PLAYERS = {
     dealer: {
         hands: 0,
-        cardsAtPlay: [],
+        cardsAtPlay: ['AH', 'kS'],
     },
     playerHands: {
         hands: 0,
@@ -87,8 +87,8 @@ function init(){
     budget.focus();
     budget.select();
     render();
-    // deal();
-    // stand();
+    deal();
+    stand();
 }
 
 function render(){
@@ -122,9 +122,10 @@ function stand(){
     if(allAces){for(let i = 0; i < dealerHandsCards.length; i++){dealerHandsValue = 12}};
     dealerCountTotal.innerHTML = dealerHandsValue;
     if(playerHandsValue === 21 && dealerHandsValue <= 21){results('blackjack'); return};
-    // dealerHandsValue > 17 ? results('checkWinner'): false;
+    let someAces = dealerHandsCards.some(r => TABLE.aces.includes(r));
+    if(someAces){dealerHandsValue = dealerHandsValue  - 10;}
+    dealerHandsValue >= 17 ? console.log('dealer stand'): console.log('dealer hit');
     dealerFlips();
-    console.log('More work to do');
     // console.log(playerHandsValue);
     // console.log(dealerHandsValue);
     // console.log(allAces);
@@ -134,13 +135,13 @@ function stand(){
 function dealerFlips(){
     setTimeout(function(){
     dealerCards[0].style.cssText = "display:none;"
-    }, 500)
+    }, 200)
     setTimeout(function(){
         dealerCountTotal.innerHTML = dealerHandsValue;
         dealerCards[0].src = `images/${dealerHandsCards[0]}.png`;
         dealerCards[0].srcset = `images/${dealerHandsCards[0]}.png`;
         $(dealerCards[0]).fadeIn(2000);
-    }, 1800)
+    }, 600)
 }
 
 function checkScore(){
@@ -230,8 +231,8 @@ function deal(e){
     });
 
     setValues();
-    // count[2] = 10; count[3] = 11;
-    // count[0] = 11; count[1] = 10;
+    count[2] = 10; count[3] = 11;
+    count[0] = 11; count[1] = 10;
 
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
