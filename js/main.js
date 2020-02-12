@@ -2,7 +2,7 @@
 const PLAYERS = {
     dealer: {
         hands: 0,
-        cardsAtPlay: ['AH','AC'],
+        cardsAtPlay: [],
     },
     playerHands: {
         hands: 0,
@@ -77,6 +77,7 @@ readyBet.addEventListener('click', placeBet);
 TABLE.moves.deal.addEventListener('click', deal);
 budget.addEventListener('keyup', function(e){if(e.keyCode === 13){e.preventDefault();beforeWager.click();}})
 TABLE.moves.hit.addEventListener('click', hit);
+TABLE.moves.stand.addEventListener('click', stand);
 
 /* ----- FUNCTIONS ----*/
 
@@ -87,7 +88,7 @@ function init(){
     budget.select();
     render();
     // deal();
-    stand();
+    // stand();
 }
 
 function render(){
@@ -115,21 +116,25 @@ function hit(){
 
 function stand(){
     // Get full dealer hand value
-    if(dealerCards[0].getAttribute('src') === "images/seekers.png"){dealerHandsValue += dealerHiddenCard};
+    dealerHandsValue += dealerHiddenCard
     // Check if both cards of dealer are aces
     let allAces = dealerHandsCards.every(r => TABLE.aces.includes(r));
     if(allAces){for(let i = 0; i < dealerHandsCards.length; i++){dealerHandsValue = 12}};
-    console.log(dealerHandsValue);
-    console.log(allAces);
-    console.log(dealerHandsCards);
+    dealerCountTotal.innerHTML = dealerHandsValue;
+    if(playerHandsValue === 21 && dealerHandsValue <= 21){results('blackjack'); return};
+    // dealerHandsValue > 17 ? results('checkWinner'): false;
     dealerFlips();
-    dealerHandsValue > 17 ? results('checkWinner'): false;
+    console.log('More work to do');
+    // console.log(playerHandsValue);
+    // console.log(dealerHandsValue);
+    // console.log(allAces);
+    // console.log(dealerHandsCards);
 }
 
 function dealerFlips(){
     setTimeout(function(){
     dealerCards[0].style.cssText = "display:none;"
-    }, 1500)
+    }, 500)
     setTimeout(function(){
         dealerCountTotal.innerHTML = dealerHandsValue;
         dealerCards[0].src = `images/${dealerHandsCards[0]}.png`;
@@ -159,7 +164,7 @@ function results(player){
             endRound.innerHTML = `WINNER $${congrats}`;
             addOverlay();
             newRound();
-        }, 2500)
+        }, 3500)
         }else if(playerHandsValue === dealerHandsValue){
             setTimeout(function(){
                 dealerFlips();
@@ -183,7 +188,7 @@ function push(){
         endRound.style.cssText = "color:white;";
         endRound.innerHTML = `PUSH`;
         addOverlay();
-    },3000)
+    },3500)
 }
 
 function addOverlay(){
@@ -225,8 +230,8 @@ function deal(e){
     });
 
     setValues();
-    count[2] = 10; count[3] = 11;
-    count[0] = 11; count[1] = 11;
+    // count[2] = 10; count[3] = 11;
+    // count[0] = 11; count[1] = 10;
 
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
