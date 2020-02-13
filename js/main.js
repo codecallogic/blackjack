@@ -1,3 +1,5 @@
+// IF dealer wins refresh tableBet
+
 /* ----- CONSTANTS ----*/
 const PLAYERS = {
     dealer: {
@@ -20,7 +22,6 @@ const TABLE = {
     moves: {
         hit: document.querySelector("#hit"),
         deal: document.querySelector("#deal"),
-        insure: document.querySelector("#insure"),
         stand: document.querySelector("#stand")
     },
     bets: {
@@ -39,9 +40,10 @@ let tableMoneyDown = 0;
 let cardsGenerated = [];
 let dealerHiddenCard = 0;
 let count = [];
-let unavailableCards = [];
 let saveTableBet = 0;
 let congrats;
+let losses;
+let unavailableCards = [];
 let playerTurn = 0;
 let checkingHands;
 let checkingCards;
@@ -67,7 +69,9 @@ let instructions = document.querySelector('#instructions');
 let imageEl = "<img src='' alt=''>";
 let readyBet = document.querySelector('.sub-table');
 let dealerCards = document.querySelectorAll('#dealerCards > img');
+let dealerCardsDiv = document.querySelectorAll('#dealerCards');
 let playerCards = document.querySelectorAll('#playerCards > img');
+let playerCardsDiv = document.querySelectorAll('#playerCards');
 let dealerCountTotal = document.querySelector('#dealerCount');
 let playerCountTotal = document.querySelector('#playerCount');
 let newCard = document.createElement('img');
@@ -90,8 +94,8 @@ function init(){
     budget.focus();
     budget.select();
     render();
+    // newRound();
     // deal();
-    // stand();
 }
 
 function render(){
@@ -110,18 +114,19 @@ function results(play){
             dealerFlips();
         })
         setTimeout(function(){
-            saveTableBet = tableBet;
-            congrats = (tableBet + tableBet) + (tableBet * 1.5);
+            congrats = tableBet * 1.5;
             tableMoneyDown += congrats;
-            total.innerHTML = tableMoneyDown - saveTableBet;
+            total.innerHTML = tableMoneyDown;
             endRound.style.cssText = "color: var(--yellow-gold);";
-            endRound.innerHTML = `BLACKJACK ${congrats}`;
+            endRound.innerHTML = `BLACKJACK $ ${congrats}`;
             addOverlay();
-            newRound();
-        }, 1500)
+        }, 2200)
         }else if(playerHandsValue === dealerHandsValue){
             dealerFlips();
             push();
+            setTimeout(function(){
+                newRound();
+            }, 2000);
         } 
     }
     if(play === 'checkWinner'){
@@ -140,6 +145,9 @@ function results(play){
         }else if(playerHandsValue === dealerHandsValue){
             dealerFlips();
             push();
+            setTimeout(function(){
+                newRound();
+            }, 2000);
         }
     }
 }
@@ -147,36 +155,66 @@ function results(play){
 function newRound(){
     // On click of event fade out play buttons and fade in deal button amount placed from betting stage
     for(let moves in TABLE.moves){$(TABLE.moves[moves]).fadeOut(1500); $(instructions).fadeOut(300);}
-    $(TABLE.moves.deal).fadeIn(300);
 
-    // Enable click for chips after deal is set and game is in motion
+    // nable click for chips after deal is set and game is in motion
     for(let images in TABLE.bets){TABLE.bets[images].firstElementChild.style.pointerEvents = 'auto';};
+
+    //Reset game for new round
+    dealerCards = document.getElementById('dealerCards').innerHTML = '';
+    dealerCards = document.getElementById('playerCards').innerHTML = '';
+    dealerCountTotal.innerHTML = '';
+    playerCountTotal.innerHTML = '';
+    dealerHandsCards = [];
+    playerHandsCards = [];
+    dealerHandsValue = 0;
+    playerHandsValue = 0;
+    playerTurn = 0;
+    dealerHiddenCard = 0;
+    setTimeout(function()
+    {
+        instructions.innerHTML = 'Place your bets...';
+        $(instructions).slideDown(600);
+    }, 1000);
+    if(tableMoneyDown <= 0)
+    {
+        for(let bets in TABLE.bets)
+        { 
+            TABLE.bets[bets].firstElementChild.style.cssText = "display:none;";
+            total.style.cssText = "display:none;";
+        }
+    }
 }
 
 function playerWins(){
     setTimeout(function(){
-        saveTableBet = tableBet;
-        congrats = tableBet + tableBet;
-        tableMoneyDown += congrats;
-        total.innerHTML = tableMoneyDown - saveTableBet;
+        console.log(tableBet)
+        console.log(tableMoneyDown);
+        console.log(tableBet);
+        total.innerHTML = tableMoneyDown;
         endRound.style.cssText = "color: var(--yellow-gold);";
-        endRound.innerHTML = `WIN ${congrats}`;
+        endRound.innerHTML = `WIN $ ${tableBet}`;
         addOverlay();
         newRound();
-    }, 1500)
+    }, 2200)
 }
 
 function dealerWins(){
     setTimeout(function(){
-        saveTableBet = tableBet;
-        losses = tableBet;
-        tableMoneyDown -= congrats;
-        total.innerHTML = tableMoneyDown - saveTableBet;
+        tableMoneyDown -= tableBet;
+        total.innerHTML = tableMoneyDown;
         endRound.style.cssText = "color:white;";
         endRound.innerHTML = `DEALER WINS`;
+        if(tableMoneyDown <= 0)
+        {
+            for(let bets in TABLE.bets)
+            { 
+                TABLE.bets[bets].firstElementChild.style.cssText = "display:none;";
+                total.style.cssText = "display:none;";
+            }
+        }
         addOverlay();
         newRound();
-    }, 1500)
+    }, 2200)
 }
 
 function push(){
@@ -199,6 +237,7 @@ function addOverlay(){
         endRound.innerHTML = "";
         overlay.style.cssText = "display:none;";
     })
+    newRound();
 }
 
 function hit(){
@@ -210,7 +249,7 @@ function hit(){
     playerHandsCards.push(cardsGenerated[0]);
     // console.log(playerHandsCards);
     playerCountTotal.innerHTML = playerHandsValue;
-    for(let i = 0; i < playerHandsCards.length; i++){document.querySelector('#playerCards').appendChild(newCard.cloneNode());}
+    for(let i = 0; i < 1; i++){document.querySelector('#playerCards').appendChild(newCard.cloneNode());}
     let newPlayerCards = document.querySelectorAll('#playerCards > img');
     newPlayerCards[newPlayerCards.length - 1].src = `images/${playerHandsCards[playerHandsCards.length - 1]}.png`;
     newPlayerCards[newPlayerCards.length - 1].style.cssText = "-ms-transform: rotate(-15deg); transform: rotate(-15deg);";
@@ -249,7 +288,7 @@ function dealerHit(){
     checkScore();
     dealerHandsCards.push(cardsGenerated[0]);
     dealerCountTotal.innerHTML = dealerHandsValue;
-    for(let i = 0; i < dealerHandsCards.length; i++){document.querySelector('#dealerCards').appendChild(newCard.cloneNode());}
+    for(let i = 0; i < 1; i++){document.querySelector('#dealerCards').appendChild(newCard.cloneNode());}
     let newDealerCards = document.querySelectorAll('#dealerCards > img');
     newDealerCards[newDealerCards.length - 1].src = `images/${dealerHandsCards[dealerHandsCards.length - 1]}.png`;
     newDealerCards[newDealerCards.length - 1].style.cssText = "-ms-transform: rotate(-15deg); transform: rotate(-15deg);";
@@ -257,7 +296,7 @@ function dealerHit(){
     console.log(dealerHandsValue);
     cardsGenerated = [];
     count = [];
-    dealerHandsValue < 17 ? stand() : results('checkWinner');
+    dealerHandsValue < 17 ? dealerHit() : results('checkWinner');
 }
 
 function dealerFlips(){
@@ -280,9 +319,9 @@ function checkScore(){
     console.log(handsPlusCard);
     if(handsPlusCard > 21){if(count[0] === 11){count[0] = 1}};
     console.log(count[0]);
-    checkingHands = handsPlusCard;
+    checkingHands = checkingHands + count[0];
     console.log(checkingHands);
-    if(someAces && count[0] !== 1){if(checkingHands > 21){checkingHands = checkingHands - 10;}}
+    // if(someAces && count[0] !== 1){if(checkingHands > 21){checkingHands = checkingHands - 10;}}
     console.log(checkingHands);
     playerTurn === 0 ? playerHandsValue = checkingHands: dealerHandsValue = checkingHands;
     console.log(dealerHandsValue);
@@ -297,15 +336,23 @@ function deal(e){
     // Disable click for chips after deal is set and game is in motion
     for(let images in TABLE.bets){TABLE.bets[images].firstElementChild.style.pointerEvents = 'none';}
 
+    // Create image elements for cards
+    for(let i = 0; i < 2; i++){document.querySelector('#dealerCards').appendChild(newCard.cloneNode());}
+    for(let i = 0; i < 2; i++){document.querySelector('#playerCards').appendChild(newCard.cloneNode());}
+    dealerCards = document.querySelectorAll('#dealerCards > img');
+    playerCards = document.querySelectorAll('#playerCards > img');
+    
     // Generate random cards
     for(let i = 0; i < 4; i++){randomCards();}
 
     dealerHandsCards.push(cardsGenerated[0], cardsGenerated[1]);
     playerHandsCards.push(cardsGenerated[2], cardsGenerated[3]);
+    console.log(dealerCards);
     
     // Arrange table with random selected cards
     setTimeout(function(){
             dealerCards[0].src = `images/seekers.png`;
+            dealerCards[0].srcset = ``;
             dealerCards[1].src = `images/${dealerHandsCards[1]}.png`;
             playerCards[0].src = `images/${playerHandsCards[0]}.png`;
             playerCards[1].src = `images/${playerHandsCards[1]}.png`;
@@ -314,8 +361,6 @@ function deal(e){
     });
 
     setValues();
-    // count[2] = 3; count[3] = 2;
-    // count[0] = 10; count[1] = 7;
 
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
@@ -362,9 +407,11 @@ function setValues(){
 function placeBet(e){
     let bet = parseInt(e.target.id);
     if(e.target.tagName !== 'IMG' || tableMoneyDown === 0) return;
+    console.log(tableMoneyDown);
     totalBet.style.cssText = "color: white; font-size:40px; padding:0 2vmin 0 3vmin;";
     tableBet += tableMoneyDown - bet <= 0 ? (tableMoneyDown - bet) + bet: bet;
     tableMoneyDown -= bet;
+    console.log(tableMoneyDown);
     tableMoneyDown <= 0 ? tableMoneyDown = 0: tableMoneyDown;
     if(tableMoneyDown <= 0)
     {
