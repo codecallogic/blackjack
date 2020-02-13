@@ -2,7 +2,7 @@
 const PLAYERS = {
     dealer: {
         hands: 0,
-        cardsAtPlay: ['AH', 'kS'],
+        cardsAtPlay: [],
     },
     playerHands: {
         hands: 0,
@@ -42,6 +42,9 @@ let count = [];
 let unavailableCards = [];
 let saveTableBet = 0;
 let congrats;
+let playerTurn = 0;
+let checkingHands;
+let checkingCards;
 
 /* ----- CACHED ELEMENT REFERENCE ----*/
 let chips = TABLE.chips;
@@ -87,8 +90,8 @@ function init(){
     budget.focus();
     budget.select();
     render();
-    deal();
-    stand();
+    // deal();
+    // stand();
 }
 
 function render(){
@@ -99,16 +102,118 @@ function render(){
     for(let moves in TABLE.moves){TABLE.moves[moves].style.cssText = "display:none;";}
 }
 
+function results(play){
+    if(play === 'blackjack'){
+        // dealerHandsValue += dealerHiddenCard;
+        if(playerHandsValue !== dealerHandsValue){
+        setTimeout(function(){
+            dealerFlips();
+        })
+        setTimeout(function(){
+            saveTableBet = tableBet;
+            congrats = (tableBet + tableBet) + (tableBet * 1.5);
+            tableMoneyDown += congrats;
+            total.innerHTML = tableMoneyDown - saveTableBet;
+            endRound.style.cssText = "color: var(--yellow-gold);";
+            endRound.innerHTML = `BLACKJACK ${congrats}`;
+            addOverlay();
+            newRound();
+        }, 1500)
+        }else if(playerHandsValue === dealerHandsValue){
+            dealerFlips();
+            push();
+        } 
+    }
+    if(play === 'checkWinner'){
+        console.log(playerHandsValue);
+        console.log(dealerHandsValue);
+        if(dealerHandsValue > playerHandsValue && dealerHandsValue <= 21){
+            dealerWins();
+        }else if(playerHandsValue > dealerHandsValue && playerHandsValue <= 21){
+            console.log(dealerHandsValue);
+            console.log(playerHandsValue);
+            playerWins();
+        }else if(dealerHandsValue > 21 && playerHandsValue <= 21){
+            playerWins();
+        }else if(playerHandsValue > 21 && dealerHandsValue <= 21){
+            dealerWins();
+        }else if(playerHandsValue === dealerHandsValue){
+            dealerFlips();
+            push();
+        }
+    }
+}
+
+function newRound(){
+    // On click of event fade out play buttons and fade in deal button amount placed from betting stage
+    for(let moves in TABLE.moves){$(TABLE.moves[moves]).fadeOut(1500); $(instructions).fadeOut(300);}
+    $(TABLE.moves.deal).fadeIn(300);
+
+    // Enable click for chips after deal is set and game is in motion
+    for(let images in TABLE.bets){TABLE.bets[images].firstElementChild.style.pointerEvents = 'auto';};
+}
+
+function playerWins(){
+    setTimeout(function(){
+        saveTableBet = tableBet;
+        congrats = tableBet + tableBet;
+        tableMoneyDown += congrats;
+        total.innerHTML = tableMoneyDown - saveTableBet;
+        endRound.style.cssText = "color: var(--yellow-gold);";
+        endRound.innerHTML = `WIN ${congrats}`;
+        addOverlay();
+        newRound();
+    }, 1500)
+}
+
+function dealerWins(){
+    setTimeout(function(){
+        saveTableBet = tableBet;
+        losses = tableBet;
+        tableMoneyDown -= congrats;
+        total.innerHTML = tableMoneyDown - saveTableBet;
+        endRound.style.cssText = "color:white;";
+        endRound.innerHTML = `DEALER WINS`;
+        addOverlay();
+        newRound();
+    }, 1500)
+}
+
+function push(){
+    setTimeout(function(){
+        endRound.style.cssText = "color:white;";
+        endRound.innerHTML = `PUSH`;
+        addOverlay();
+    },1500)
+}
+
+function addOverlay(){
+    $(overlay).fadeIn(100);
+    $(doubleDown.firstElementChild).fadeOut(1500);
+    $(TABLE.moves.deal).fadeOut(1000);
+    $(totalBet).fadeOut(1500);
+    $(overlay).on('click', function(){
+        $(totalBet).fadeIn(1500);
+        $(doubleDown.firstElementChild).fadeIn(1500);
+        $(TABLE.moves.deal).fadeIn(1500);
+        endRound.innerHTML = "";
+        overlay.style.cssText = "display:none;";
+    })
+}
+
 function hit(){
     // Add additional card if player presses hit
     randomCards();
     setValues();
     checkScore();
-    playerHandsCards = cardsGenerated;
+    // console.log(playerHandsCards);
+    playerHandsCards.push(cardsGenerated[0]);
+    // console.log(playerHandsCards);
     playerCountTotal.innerHTML = playerHandsValue;
     for(let i = 0; i < playerHandsCards.length; i++){document.querySelector('#playerCards').appendChild(newCard.cloneNode());}
     let newPlayerCards = document.querySelectorAll('#playerCards > img');
     newPlayerCards[newPlayerCards.length - 1].src = `images/${playerHandsCards[playerHandsCards.length - 1]}.png`;
+    newPlayerCards[newPlayerCards.length - 1].style.cssText = "-ms-transform: rotate(-15deg); transform: rotate(-15deg);";
     $(newPlayerCards).fadeIn(1500);
     cardsGenerated = [];
     count = [];
@@ -116,20 +221,43 @@ function hit(){
 
 function stand(){
     // Get full dealer hand value
-    dealerHandsValue += dealerHiddenCard
-    // Check if both cards of dealer are aces
-    let allAces = dealerHandsCards.every(r => TABLE.aces.includes(r));
-    if(allAces){for(let i = 0; i < dealerHandsCards.length; i++){dealerHandsValue = 12}};
-    dealerCountTotal.innerHTML = dealerHandsValue;
+    console.log(dealerHandsValue);
+    // Check if player wins Blackjack
     if(playerHandsValue === 21 && dealerHandsValue <= 21){results('blackjack'); return};
-    let someAces = dealerHandsCards.some(r => TABLE.aces.includes(r));
-    if(someAces){dealerHandsValue = dealerHandsValue  - 10;}
-    dealerHandsValue >= 17 ? console.log('dealer stand'): console.log('dealer hit');
+    if(playerHandsValue < 21 && dealerHandsValue === 21){dealerFlips(); results('checkWinner'); return};
+    // Check if both cards of dealer are aces
+    let twoAces; let allAces;
+    if(dealerHandsCards.length <= 2){twoAces = dealerHandsCards.every(r => TABLE.aces.includes(r));}
+    if(dealerHandsCards.length <= 4 && dealerHandsCards.length > 2){allAces = dealerHandsCards.every(r => TABLE.aces.includes(r));}
+    if(twoAces){dealerHandsValue = 12}; if(allAces){dealerHandsValue = 4};
     dealerFlips();
-    // console.log(playerHandsValue);
-    // console.log(dealerHandsValue);
-    // console.log(allAces);
-    // console.log(dealerHandsCards);
+    dealerCountTotal.innerHTML = dealerHandsValue;
+    console.log(dealerHandsValue);
+    if(dealerHandsValue <= 17){
+        if(playerHandsValue < 21){
+        dealerHit(); return;
+        }else{
+        results('checkWinner');
+        }}
+    dealerHandsValue > 17 ? results('checkWinner') : false;
+}
+
+function dealerHit(){
+    playerTurn = 1;
+    randomCards();
+    setValues();
+    checkScore();
+    dealerHandsCards.push(cardsGenerated[0]);
+    dealerCountTotal.innerHTML = dealerHandsValue;
+    for(let i = 0; i < dealerHandsCards.length; i++){document.querySelector('#dealerCards').appendChild(newCard.cloneNode());}
+    let newDealerCards = document.querySelectorAll('#dealerCards > img');
+    newDealerCards[newDealerCards.length - 1].src = `images/${dealerHandsCards[dealerHandsCards.length - 1]}.png`;
+    newDealerCards[newDealerCards.length - 1].style.cssText = "-ms-transform: rotate(-15deg); transform: rotate(-15deg);";
+    $(newDealerCards).fadeIn(1500);
+    console.log(dealerHandsValue);
+    cardsGenerated = [];
+    count = [];
+    dealerHandsValue < 17 ? stand() : results('checkWinner');
 }
 
 function dealerFlips(){
@@ -145,65 +273,20 @@ function dealerFlips(){
 }
 
 function checkScore(){
-    if(playerHandsValue += count[0] > 21){if(count[0] === 11){count[0] = 1}};
-    playerHandsValue += count[0];
-    if(playerHandsValue > 21){stand(); return};
-}
-
-function results(player){
-    if(player === 'blackjack'){
-        // dealerHandsValue += dealerHiddenCard;
-        if(playerHandsValue !== dealerHandsValue){
-        setTimeout(function(){
-            dealerFlips();
-        })
-        setTimeout(function(){
-            saveTableBet = tableBet;
-            congrats = tableBet * 1.5
-            tableMoneyDown += congrats;
-            total.innerHTML = tableMoneyDown - saveTableBet;
-            endRound.innerHTML = `WINNER $${congrats}`;
-            addOverlay();
-            newRound();
-        }, 3500)
-        }else if(playerHandsValue === dealerHandsValue){
-            setTimeout(function(){
-                dealerFlips();
-                push();
-            })
-        } 
-    }
-}
-
-function newRound(){
-    // On click of event fade out play buttons and fade in deal button amount placed from betting stage
-    for(let moves in TABLE.moves){$(TABLE.moves[moves]).fadeOut(1500); $(instructions).fadeOut(300);}
-    $(TABLE.moves.deal).fadeIn(300);
-
-    // Enable click for chips after deal is set and game is in motion
-    for(let images in TABLE.bets){TABLE.bets[images].firstElementChild.style.pointerEvents = 'auto';};
-}
-
-function push(){
-    setTimeout(function(){
-        endRound.style.cssText = "color:white;";
-        endRound.innerHTML = `PUSH`;
-        addOverlay();
-    },3500)
-}
-
-function addOverlay(){
-    $(overlay).fadeIn(100);
-    $(doubleDown.firstElementChild).fadeOut(1500);
-    $(TABLE.moves.deal).fadeOut(1000);
-    $(totalBet).fadeOut(1500);
-    $(overlay).on('click', function(){
-        $(totalBet).fadeIn(1500);
-        $(doubleDown.firstElementChild).fadeIn(1500);
-        $(TABLE.moves.deal).fadeIn(1500);
-        endRound.innerHTML = "";
-        overlay.style.cssText = "display:none;";
-    })
+    playerTurn === 0 ? checkingHands = playerHandsValue: checkingHands = dealerHandsValue;
+    playerTurn === 0 ? checkingCards = playerHandsCards: checkingCards = dealerHandsCards;
+    let someAces = checkingCards.some(r => TABLE.aces.includes(r)); 
+    let handsPlusCard = checkingHands + count[0];
+    console.log(handsPlusCard);
+    if(handsPlusCard > 21){if(count[0] === 11){count[0] = 1}};
+    console.log(count[0]);
+    checkingHands = handsPlusCard;
+    console.log(checkingHands);
+    if(someAces && count[0] !== 1){if(checkingHands > 21){checkingHands = checkingHands - 10;}}
+    console.log(checkingHands);
+    playerTurn === 0 ? playerHandsValue = checkingHands: dealerHandsValue = checkingHands;
+    console.log(dealerHandsValue);
+    if(checkingHands >= 21){stand(); return};
 }
 
 function deal(e){
@@ -231,13 +314,18 @@ function deal(e){
     });
 
     setValues();
-    count[2] = 10; count[3] = 11;
-    count[0] = 11; count[1] = 10;
+    // count[2] = 3; count[3] = 2;
+    // count[0] = 10; count[1] = 7;
 
     playerHandsValue += count[2]+count[3];
     dealerHandsValue += count[1];
     dealerHiddenCard += count[0];
+    console.log(dealerHandsValue);
+    console.log(dealerHiddenCard);
+    setValues();
     dealerCountTotal.innerHTML = dealerHandsValue;
+    dealerHandsValue = dealerHandsValue + dealerHiddenCard;
+    console.log(dealerHandsValue);
     playerCountTotal.innerHTML = playerHandsValue;
     $(playerCountTotal).fadeIn(2000);
     $(dealerCountTotal).fadeIn(2000);
