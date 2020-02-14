@@ -360,7 +360,7 @@ function deal(e) {
     });
 
     setValues();
-    count[2] = 11; count[3] = 10;
+    // count[2] = 11; count[3] = 10;
 
     playerHandsValue += count[2] + count[3];
     dealerHandsValue += count[1];
