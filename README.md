@@ -4,7 +4,7 @@
     <div>
     Beat The Dealer. There are some misconceptions about the objective of the game of blackjack but at the simplest level all you are trying to do is beat the dealer.
     
-    ![alt text](https://github.com/codecallogic/blackjack/blob/master/images/game.png)
+    [alt text]("https://github.com/codecallogic/blackjack/blob/master/images/game.png")
     <img src="https://www.blackjackapprenticeship.com/wp-content/uploads/2018/08/blackjack-buy-in-1.jpg" alt="">
 
     How do you beat the dealer?
