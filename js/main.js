@@ -183,8 +183,15 @@ function newRound() {
 
 function playerWins() {
     setTimeout(function () {
-        tableMoneyDown += tableBet;
-        console.log(tableBet);
+        if(tableMoneyDown === totalBet.innerHTML && totalBet.innerHTML !== ''){
+            tableMoneyDown = tableMoneyDown;
+            console.log(tableMoneyDown);
+        }else{
+            tableMoneyDown += tableBet;
+            console.log(tableBet);
+            console.log(tableMoneyDown);
+        }
+        console.log(tableMoneyDown);
         total.innerHTML = tableMoneyDown;
         endRound.style.cssText = "color: var(--yellow-gold);";
         endRound.innerHTML = `WIN $ ${tableBet}`;
@@ -195,13 +202,9 @@ function playerWins() {
 
 function dealerWins() {
     setTimeout(function () {
-        console.log(tableMoneyDown);
         tableMoneyDown <= 0 ? tableBet = 0: tableMoneyDown -= tableBet;
-        console.log(tableMoneyDown);
         total.innerHTML = tableMoneyDown;
         tableMoneyDown <= 0 ? tableMoneyDown = 0 : tableMoneyDown;
-        console.log(totalBet.innerHTML);
-        console.log(tableBet);
         if(tableMoneyDown <= 0 && tableBet === 0){
             endRound.innerHTML = `GAME OVER`
             endRound.style.cssText = "color:white;";
