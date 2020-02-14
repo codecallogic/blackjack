@@ -1,11 +1,10 @@
 <h1>Blackjack</h1>
     <h6>Checkout my game at <a href="https://codecallogic.github.io/blackjack/" target="_blank" rel="noopener noreferrer">Blackjack for beginners</a></h6>
     <h2>The Objective of Blackjack</h2>
-    <div>
-    Beat The Dealer. There are some misconceptions about the objective of the game of blackjack but at the simplest level all you are trying to do is beat the dealer.
-    
     [alt text](images/game.png)
     <img src="https://www.blackjackapprenticeship.com/wp-content/uploads/2018/08/blackjack-buy-in-1.jpg" alt="">
+    <div>
+    Beat The Dealer. There are some misconceptions about the objective of the game of blackjack but at the simplest level all you are trying to do is beat the dealer.
 
     How do you beat the dealer?
 
