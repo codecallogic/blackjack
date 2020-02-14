@@ -124,13 +124,13 @@ function results(play) {
                 endRound.style.cssText = "color: var(--yellow-gold);";
                 endRound.innerHTML = `BLACKJACK $ ${congrats}`;
                 addOverlay();
-            }, 2200)
+            }, 2600)
         } else if (playerHandsValue === dealerHandsValue) {
             dealerFlips();
             push();
             setTimeout(function () {
                 newRound();
-            }, 2000);
+            }, 2500);
         }
     }
     if (play === 'checkWinner') {
@@ -147,7 +147,7 @@ function results(play) {
             push();
             setTimeout(function () {
                 newRound();
-            }, 2000);
+            }, 2500);
         }
     }
 }
@@ -184,7 +184,7 @@ function playerWins(){
         endRound.innerHTML = `WIN $ ${tableBet}`;
         tableMoneyDown = saveMoney;
         addOverlay();
-    }, 2200)
+    }, 2600)
 }
 
 function dealerWins() {
@@ -206,7 +206,7 @@ function dealerWins() {
             endRound.style.cssText = "color:white;";
             addOverlay();
         }
-    }, 2200)
+    }, 2600)
 }
 
 function push() {
