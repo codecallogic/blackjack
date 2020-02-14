@@ -1,0 +1,206 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    font-family: monarcha, serif;
+    font-style: normal;
+    font-weight: 800;
+}
+
+:root {
+    --dark-cyan: #153928;
+    --yellow-gold: #F8D363;
+}
+
+body {
+    margin: 0;
+    padding: 0vmin 10vmin;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: monarcha;
+    background-color: rgba(0, 43, 54, 0.774);
+    background-image: url(https://images.pexels.com/photos/1040499/pexels-photo-1040499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+}
+
+#machiavelli {
+    display:none;
+}
+
+#range{
+    font:5vmin bold monarcha;
+    margin-top:10vmin;
+    background-color: #565656;
+    color: white;
+    text-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: text;
+        -moz-background-clip: text;
+            background-clip: text;
+    
+}
+
+#instructions { 
+    color: white;
+    font: 7vmin bold monarcha;
+    font-family: monarcha;
+    text-align: center;
+    padding: 3vmin;
+    text-shadow: 5px 3px 10px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: text;
+        -moz-background-clip: text;
+            background-clip: text;
+    display:none;
+}
+
+#budget{
+    width:20%;
+    margin: 0 1vmin!important;
+    background-color: rgba(67, 107, 46, 0);
+    color:white;
+    padding:15px;
+    outline:0!important;
+    border:0px;
+    border-bottom:2px solid white;
+    font:5vmin bold monarcha;
+    
+}
+
+#gamble{
+    border-radius:2vmin!important;
+    background-color: rgba(67, 107, 46, 0);
+    color:white;
+    width:15%;
+    outline:0;
+    border:1px solid white;
+    font:4vmin bold monarcha;
+}
+
+.sub-table > button{
+    background-color:rgba(0, 0, 0, 0);
+    outline:0;
+    border:0;
+}
+
+#beforeWager{
+    border-radius: 2vmin!important;
+    background-color: rgba(233, 233, 233, 0);
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    color:white;
+}
+
+.moves button{
+    margin: 15vmin 0vmin;
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    padding:3vmin 0vmin;
+    border-radius: 50%;
+    background-color: #454358;
+    color:white;
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
+img {
+    height: 17vmin!important;
+    width: 17vmin!important;
+    display:none;
+}
+
+#total {
+    display:none;
+}
+
+#doubleDown{
+    background-color:rgba(0, 0, 0, 0);
+    outline:0;
+    border:0;
+}
+
+#doubleDown img{
+    animation: example1 .5s linear;
+}
+
+#deal { 
+    width: 10vmin;
+    font:3vmin bold monarcha;
+    outline:0;
+    padding:3vmin 0vmin;
+    border-radius: 50%;
+    background-color: #454358;
+    color:white;
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
+#dealerCards img{
+    width:30%!important;
+    height:30%!important;
+    float:left;
+    animation: example1 .5s linear;
+}
+
+#playerCards img{
+    width:30%!important;
+    height:30%!important;
+    float:left;
+    animation: example1 .5s linear;
+}
+
+@keyframes example1 {
+0%   { 
+transform: translateY(-100%); 		
+}
+100% { 
+transform: translateY(0%); 
+}
+}
+
+
+
+#dealerCards img:nth-of-type(1), #playerCards img:nth-of-type(1){
+    -ms-transform: rotate(-15deg); /* IE 9 */
+  transform: rotate(-15deg);
+  animation: example1 .5s linear;
+}
+
+#dealerCards img:nth-of-type(2), #playerCards img:nth-of-type(2){
+    -ms-transform: rotate(15deg); /* IE 9 */
+  transform: rotate(15deg);
+  animation: example1 .5s linear;
+}
+
+#dealerCards img:nth-of-type(3), #playerCards img:nth-of-type(3){
+    -ms-transform: rotate(15deg); /* IE 9 */
+  transform: rotate(15deg);
+  animation: example1 .5s linear;
+}
+
+.clearFix {
+    clear:both;
+}
+
+#dealerCount, #playerCount {
+    margin-top:10vmin!important;
+    font:5vmin bold monarcha;
+    color:white;
+    display:none;
+}
+
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+    display:none;
+  }
+
+  .endRound {
+      font:8vmin bold monarcha;
+      font-weight:800;
+      text-shadow: 5px 10px 5px black!important; 
+      -webkit-background-clip: text;
+        -moz-background-clip: text;
+          background-clip: text;
+  }
