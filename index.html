@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.typekit.net/rvo5uyr.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <audio id="audioPlayer" src=""></audio>
+        <div class="overlay">
+            <div class="row h-100">
+                <div class="col-3"></div>
+                <div class="col-6 my-auto text-center endRound">
+
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+        <div id="table">
+            <div class="row">
+                <div class="col-2 mt-3">
+                    <div class="sub-table">
+                        <button id="bet500"><img id="500" src="" alt="" srcset=""></button>
+                        <button id="bet100"><img id="100" src="" alt="" srcset=""></button>
+                        <button id="bet10"><img id="10" src="" alt="" srcset=""></button>
+                        <button id="bet1"><img id="1" src="" alt="" srcset=""></button>
+                        <div id="total"></div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="instructions"></div>
+                        </div>
+                        <div class="col-12">
+                            <div id="buyChips" class="md-form form-sm">
+                                <div class="d-flex justify-content-center" style="margin-top:25vmin;"><input maxlength="5" type="text" id="budget">
+                                <button id="beforeWager">Place</button></div>
+                                <div id="range">
+                                    <div class="text-center"><span>Bet Range <br> $100 - $50000</span></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
+                                    <div id="dealerCount"></div>
+                                    <div id="dealerCards" class="clearFix"></div></div>
+                                <div class="col-1"></div>
+                                <div class="col-5">
+                                    <div id="playerCount"></div>
+                                    <div id="playerCards" class="clearFix"></div></div>
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="d-flex justify-content-around col-12 moves">
+                            <div><button id="hit">Hit</button></div>
+                            <!-- <div><button id=""></button></div> -->
+                            <div><button id="stand">Stand</button></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-1 d-flex align-items-baseline tableActive" style="margin: 0 2vmin 0 5vmin;">
+                    <div style="text-align:center;">
+                        <div id="totalBet"></div>
+                        <button id="doubleDown"><img src="" alt="" srcset=""></button>
+                        <button id="deal">Deal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
