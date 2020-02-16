@@ -239,11 +239,11 @@ function addOverlay() {
 }
 
 function hit() {
+    soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
     // Add additional card if player presses hit
     randomCards();
     setValues();
     checkScore();
-    soundPlayer.src = `sounds/drawCard.wav`;
     soundPlayer.play();
     playerHandsCards.push(cardsGenerated[0]);
     playerCountTotal.innerHTML = playerHandsValue;
@@ -278,8 +278,7 @@ function stand() {
 }
 
 function dealerHit() {
-    // soundPlayer.src = `sounds/drawCard.wav`;
-    // soundPlayer.play();
+    soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
     playerTurn = 1;
     randomCards();
     setValues();
@@ -340,7 +339,7 @@ function deal(e) {
     dealerCards = document.querySelectorAll('#dealerCards > img');
     playerCards = document.querySelectorAll('#playerCards > img');
 
-    soundPlayer.src = `sounds/drawCard.wav`; soundPlayer.play()
+    soundPlayer.src = `sounds/draw4Cards.wav`; soundPlayer.play();
 
     // Generate random cards
     for (let i = 0; i < 4; i++) {randomCards();}
