@@ -159,12 +159,6 @@ function newRound() {
     for (let images in TABLE.bets) { TABLE.bets[images].firstElementChild.style.pointerEvents = 'auto'; };
 
     //Reset game for new round
-    setTimeout(function (){
-    dealerCards = document.getElementById('dealerCards').innerHTML = '';
-    dealerCards = document.getElementById('playerCards').innerHTML = '';
-    dealerCountTotal.innerHTML = '';
-    playerCountTotal.innerHTML = '';
-    }, 1200)
     dealerHandsCards = [];
     playerHandsCards = [];
     dealerHandsValue = 0;
@@ -229,6 +223,10 @@ function addOverlay() {
     }else{
         setTimeout(function(){
         $(overlay).on('click', function () {
+            dealerCards = document.getElementById('dealerCards').innerHTML = '';
+            dealerCards = document.getElementById('playerCards').innerHTML = '';
+            dealerCountTotal.innerHTML = '';
+            playerCountTotal.innerHTML = '';
             $(totalBet).fadeIn(1500);
             $(doubleDown.firstElementChild).fadeIn(1500);
             $(TABLE.moves.deal).fadeIn(1500);
