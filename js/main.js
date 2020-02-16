@@ -111,7 +111,6 @@ function render() {
 
 function results(play) {
     if (play === 'blackjack') {
-        // dealerHandsValue += dealerHiddenCard;
         if (playerHandsValue !== dealerHandsValue) {
             setTimeout(function () {
                 dealerFlips();
@@ -160,10 +159,12 @@ function newRound() {
     for (let images in TABLE.bets) { TABLE.bets[images].firstElementChild.style.pointerEvents = 'auto'; };
 
     //Reset game for new round
+    setTimeout(function (){
     dealerCards = document.getElementById('dealerCards').innerHTML = '';
     dealerCards = document.getElementById('playerCards').innerHTML = '';
     dealerCountTotal.innerHTML = '';
     playerCountTotal.innerHTML = '';
+    }, 1200)
     dealerHandsCards = [];
     playerHandsCards = [];
     dealerHandsValue = 0;
@@ -201,7 +202,6 @@ function dealerWins() {
             endRound.style.cssText = "color:white;";
             addOverlay();
         }else{
-            // tableBet = totalBet.innerHTML;
             endRound.innerHTML = `DEALER WINS`;
             endRound.style.cssText = "color:white;";
             addOverlay();
@@ -227,6 +227,7 @@ function addOverlay() {
             location.reload();
         })
     }else{
+        setTimeout(function(){
         $(overlay).on('click', function () {
             $(totalBet).fadeIn(1500);
             $(doubleDown.firstElementChild).fadeIn(1500);
@@ -234,6 +235,7 @@ function addOverlay() {
             endRound.innerHTML = "";
             overlay.style.cssText = "display:none;";
         })
+        }, 1000)
     }
     newRound();
 }
@@ -244,7 +246,6 @@ function hit() {
     randomCards();
     setValues();
     checkScore();
-    soundPlayer.play();
     playerHandsCards.push(cardsGenerated[0]);
     playerCountTotal.innerHTML = playerHandsValue;
     for (let i = 0; i < 1; i++) { document.querySelector('#playerCards').appendChild(newCard.cloneNode()); }
@@ -278,7 +279,8 @@ function stand() {
 }
 
 function dealerHit() {
-    soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
+    setTimeout(function(){
+        soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
     playerTurn = 1;
     randomCards();
     setValues();
@@ -293,6 +295,7 @@ function dealerHit() {
     cardsGenerated = [];
     count = [];
     dealerHandsValue < 17 ? dealerHit() : results('checkWinner');
+    }, 1000)
 }
 
 function dealerFlips() {
@@ -322,7 +325,7 @@ function checkScore() {
     if (handsPlusCard > 21) { if (count[0] === 11) { count[0] = 1 } };
     checkingHands = checkingHands + count[0];
     playerTurn === 0 ? playerHandsValue = checkingHands : dealerHandsValue = checkingHands;
-    if (checkingHands >= 21) { stand(); return };
+    if (checkingHands >= 21) {stand(); return };
 }
 
 function deal(e) {
