@@ -124,13 +124,13 @@ function results(play) {
                 endRound.style.cssText = "color: var(--yellow-gold);";
                 endRound.innerHTML = `BLACKJACK $ ${congrats}`;
                 addOverlay();
-            }, 2200)
+            }, 2600)
         } else if (playerHandsValue === dealerHandsValue) {
             dealerFlips();
             push();
             setTimeout(function () {
                 newRound();
-            }, 2000);
+            }, 2500);
         }
     }
     if (play === 'checkWinner') {
@@ -147,7 +147,7 @@ function results(play) {
             push();
             setTimeout(function () {
                 newRound();
-            }, 2000);
+            }, 2500);
         }
     }
 }
@@ -184,7 +184,7 @@ function playerWins(){
         endRound.innerHTML = `WIN $ ${tableBet}`;
         tableMoneyDown = saveMoney;
         addOverlay();
-    }, 2200)
+    }, 2600)
 }
 
 function dealerWins() {
@@ -206,7 +206,7 @@ function dealerWins() {
             endRound.style.cssText = "color:white;";
             addOverlay();
         }
-    }, 2200)
+    }, 2600)
 }
 
 function push() {
@@ -239,11 +239,11 @@ function addOverlay() {
 }
 
 function hit() {
+    soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
     // Add additional card if player presses hit
     randomCards();
     setValues();
     checkScore();
-    soundPlayer.src = `sounds/drawCard.wav`;
     soundPlayer.play();
     playerHandsCards.push(cardsGenerated[0]);
     playerCountTotal.innerHTML = playerHandsValue;
@@ -278,8 +278,7 @@ function stand() {
 }
 
 function dealerHit() {
-    // soundPlayer.src = `sounds/drawCard.wav`;
-    // soundPlayer.play();
+    soundPlayer.src = `sounds/draw1Card.wav`; soundPlayer.play();
     playerTurn = 1;
     randomCards();
     setValues();
@@ -340,7 +339,7 @@ function deal(e) {
     dealerCards = document.querySelectorAll('#dealerCards > img');
     playerCards = document.querySelectorAll('#playerCards > img');
 
-    soundPlayer.src = `sounds/drawCard.wav`; soundPlayer.play()
+    soundPlayer.src = `sounds/draw4Cards.wav`; soundPlayer.play();
 
     // Generate random cards
     for (let i = 0; i < 4; i++) {randomCards();}
