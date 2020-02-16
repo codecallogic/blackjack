@@ -1,0 +1,23 @@
+#minus:hover{
+    background-color:white!important;
+    color:rgba(87, 84, 84, 1)!important;
+}
+
+#add:hover{
+    background-color:white!important;
+    color: rgba(87, 84, 84, 1)!important;
+}
+
+#minus{
+    background-color: rgba(159, 159, 159, 0.432)!important;
+    color:white!important;
+    padding: 0px 10px;
+
+}
+
+#add{
+    background-color: rgba(159, 159, 159, 0.432)!important;
+    color:white!important;
+    padding: 0px 10px;
+
+}
